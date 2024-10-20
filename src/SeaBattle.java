@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class SeaBattle {
 
@@ -15,7 +16,34 @@ public class SeaBattle {
         }
 
         showEmptyField(rows, cols);
+        getPlayerInput();
         showField(matrix);
+    }
+
+    public static void getPlayerInput() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the coordinates (for example, B3):");
+        String input = scanner.nextLine().toUpperCase();
+
+        if (input.length() < 2 || input.length() > 3) {
+            System.out.println("Incorrect format. Try again.");
+            return;
+        }
+
+        char columnChar = input.charAt(0);
+        String rowStr = input.substring(1);
+
+        int col = columnChar - 'A';
+        int row = Integer.parseInt(rowStr) - 1;
+
+        if (col < 0 || col > 6 || row < 0 || row > 6) {
+            System.out.println("Coordinates are out of range. Try again.");
+        } else {
+            System.out.println("You've entered the coordinates: " + columnChar + rowStr + " (row " + (row + 1) + ", column " + (col + 1) + ")");
+        }
+
+        scanner.close();
     }
 
     public static void placeRandomBlock(int[][] matrix, Random random, int blockHeight, int blockWidth) {
