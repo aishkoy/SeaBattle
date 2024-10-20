@@ -14,7 +14,7 @@ public class SeaBattle {
         for (int[] blockSize : blockSizes) {
             placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
         }
-        showField(matrix);
+//        showField(matrix);
         showEmptyField(rows, cols);
 
         int[][] shots = new int[rows][cols];
@@ -32,6 +32,13 @@ public class SeaBattle {
             int col = coordinates[1];
 
             processPlayerShot(matrix, shots, row, col);
+
+            if (matrix[row][col] == 1) {
+                if (isShipSunk(matrix, shots, row, col)) {
+                    System.out.println("You've sunk a ship! \uD83C\uDFF3\uFE0F\u200D");
+                    markSunkShip(matrix, shots, row, col);
+                }
+            }
             showUpdatedField(matrix, shots);
 
             numberOfAttempts -= 1;
@@ -179,31 +186,6 @@ public class SeaBattle {
         }
     }
 
-    public static void showUpdatedField(int[][] matrix, int[][] shots) {
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-
-        System.out.print("   ");
-        for (char c = 'A'; c < 'A' + cols; c++) {
-            System.out.print(c + "  ");
-        }
-        System.out.println();
-
-        for (int i = 0; i < rows; i++) {
-            System.out.print((i + 1) + " ");
-            for (int j = 0; j < cols; j++) {
-                if (shots[i][j] == 2) {
-                    System.out.print("🔥 ");
-                } else if (shots[i][j] == 1) {
-                    System.out.print("⬛ ");
-                } else {
-                    System.out.print("⬜ ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
     public static boolean isShipSunk(int[][] matrix, int[][] shots, int row, int col) {
         int rows = matrix.length;
         int cols = matrix[0].length;
@@ -229,6 +211,33 @@ public class SeaBattle {
                     shots[i][j] = 3;
                 }
             }
+        }
+    }
+
+    public static void showUpdatedField(int[][] matrix, int[][] shots) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        System.out.print("   ");
+        for (char c = 'A'; c < 'A' + cols; c++) {
+            System.out.print(c + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < rows; i++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < cols; j++) {
+                if (shots[i][j] == 2) {
+                    System.out.print("🔥 ");
+                } else if (shots[i][j] == 1) {
+                    System.out.print("⬛ ");
+                } else if (matrix[i][j] == 3) {
+                    System.out.print("\uD83C\uDFF3\uFE0F\u200D ");
+                } else {
+                    System.out.print("⬜ ");
+                }
+            }
+            System.out.println();
         }
     }
 
