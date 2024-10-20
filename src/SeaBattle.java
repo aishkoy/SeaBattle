@@ -11,6 +11,30 @@ public class SeaBattle {
         int[][] blockSizes = {{1, 3}, {1, 2}, {1, 2}, {1, 1}, {1, 1}, {1, 1}, {1, 1}};
     }
 
+    public static void placeRandomBlock(int[][] matrix, Random random, int blockHeight, int blockWidth) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        boolean placed = false;
+
+        while (!placed) {
+            boolean isHorizontal = random.nextBoolean();
+            int blockH = isHorizontal ? blockHeight : blockWidth;
+            int blockW = isHorizontal ? blockWidth : blockHeight;
+
+            int randomRow = random.nextInt(rows);
+            int randomCol = random.nextInt(cols);
+
+            if (canPlaceBlock(matrix, randomRow, randomCol, blockH, blockW, isHorizontal)) {
+                for (int i = 0; i < blockH; i++) {
+                    for (int j = 0; j < blockW; j++) {
+                        matrix[randomRow + i][randomCol + j] = 1;
+                    }
+                }
+                placed = true;
+            }
+        }
+    }
+
 
     public static boolean canPlaceBlock(int[][] matrix, int row, int col, int blockHeight, int blockWidth, boolean isHorizontal) {
         int rows = matrix.length;
