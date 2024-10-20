@@ -69,7 +69,7 @@ public class SeaBattle {
         char columnChar = input.charAt(0);
         String rowStr = input.substring(1);
 
-        boolean isNumeric = true;4
+        boolean isNumeric = true;
         for (int i = 0; i < rowStr.length(); i++) {
             if (!Character.isDigit(rowStr.charAt(i))) {
                 isNumeric = false;
