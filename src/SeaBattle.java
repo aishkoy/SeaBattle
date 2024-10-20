@@ -204,6 +204,34 @@ public class SeaBattle {
         }
     }
 
+    public static boolean isShipSunk(int[][] matrix, int[][] shots, int row, int col) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 1 && shots[i][j] != 2) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void markSunkShip(int[][] matrix, int[][] shots, int row, int col) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 1 && shots[i][j] == 2) {
+                    matrix[i][j] = 3;
+                    shots[i][j] = 3;
+                }
+            }
+        }
+    }
+
     public static boolean checkAllShipsSunk(int[][] matrix, int[][] shots) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
