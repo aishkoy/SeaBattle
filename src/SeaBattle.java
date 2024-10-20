@@ -14,7 +14,7 @@ public class SeaBattle {
         for (int[] blockSize : blockSizes) {
             placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
         }
-//        showField(matrix);
+
         showEmptyField(rows, cols);
 
         int[][] shots = new int[rows][cols];
@@ -51,6 +51,8 @@ public class SeaBattle {
 
         if (numberOfAttempts == 0) {
             System.out.println("Game over! You've used all your attempts.");
+            System.out.println("This is where the ships were located");
+            showField(matrix);
         }
 
     }
@@ -304,7 +306,7 @@ public class SeaBattle {
     public static boolean checkAllShipsSunk(int[][] matrix, int[][] shots) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == 1 && shots[i][j] != 2) {
+                if (matrix[i][j] == 1 && shots[i][j] != 3) {
                     return false;
                 }
             }
