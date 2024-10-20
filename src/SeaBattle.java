@@ -35,7 +35,7 @@ public class SeaBattle {
 
             if (matrix[row][col] == 1) {
                 if (isShipSunk(matrix, shots, row, col)) {
-                    System.out.println("You've sunk a ship! \uD83C\uDFF3\uFE0F\u200D");
+                    System.out.println("You've sunk a ship! \uD83D\uDCA5");
                     markSunkShip(matrix, shots, row, col);
                 }
             }
@@ -186,33 +186,80 @@ public class SeaBattle {
         }
     }
 
-    public static boolean isShipSunk(int[][] matrix, int[][] shots, int row, int col) {
-        int rows = matrix.length;
-        int cols = matrix[0].length;
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (matrix[i][j] == 1 && shots[i][j] != 2) {
+    public static boolean isShipSunk(int[][] matrix, int[][] shots, int row, int col) {
+        if (isHorizontalShip(matrix, row, col)) {
+            int startCol = col;
+            while (startCol >= 0 && matrix[row][startCol] == 1) {
+                if (shots[row][startCol] != 2) {
                     return false;
                 }
+                startCol--;
+            }
+            startCol = col + 1;
+            while (startCol < matrix[0].length && matrix[row][startCol] == 1) {
+                if (shots[row][startCol] != 2) {
+                    return false;
+                }
+                startCol++;
+            }
+        } else {
+            int startRow = row;
+            while (startRow >= 0 && matrix[startRow][col] == 1) {
+                if (shots[startRow][col] != 2) {
+                    return false;
+                }
+                startRow--;
+            }
+            startRow = row + 1;
+            while (startRow < matrix.length && matrix[startRow][col] == 1) {
+                if (shots[startRow][col] != 2) {
+                    return false;
+                }
+                startRow++;
             }
         }
         return true;
     }
 
-    public static void markSunkShip(int[][] matrix, int[][] shots, int row, int col) {
-        int rows = matrix.length;
-        int cols = matrix[0].length;
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (matrix[i][j] == 1 && shots[i][j] == 2) {
-                    matrix[i][j] = 3;
-                    shots[i][j] = 3;
-                }
+    public static void markSunkShip(int[][] matrix, int[][] shots, int row, int col) {
+        if (isHorizontalShip(matrix, row, col)) {
+            int startCol = col;
+            while (startCol >= 0 && matrix[row][startCol] == 1) {
+                shots[row][startCol] = 3;
+                startCol--;
+            }
+            startCol = col + 1;
+            while (startCol < matrix[0].length && matrix[row][startCol] == 1) {
+                shots[row][startCol] = 3;
+                startCol++;
+            }
+        } else {
+            int startRow = row;
+            while (startRow >= 0 && matrix[startRow][col] == 1) {
+                shots[startRow][col] = 3;
+                startRow--;
+            }
+            startRow = row + 1;
+            while (startRow < matrix.length && matrix[startRow][col] == 1) {
+                shots[startRow][col] = 3;
+                startRow++;
             }
         }
     }
+
+    public static boolean isHorizontalShip(int[][] matrix, int row, int col) {
+        int cols = matrix[0].length;
+        if (col > 0 && matrix[row][col - 1] == 1) {
+            return true;
+        }
+        if (col < cols - 1 && matrix[row][col + 1] == 1) {
+            return true;
+        }
+        return false;
+    }
+
 
     public static void showUpdatedField(int[][] matrix, int[][] shots) {
         int rows = matrix.length;
@@ -231,8 +278,8 @@ public class SeaBattle {
                     System.out.print("🔥 ");
                 } else if (shots[i][j] == 1) {
                     System.out.print("⬛ ");
-                } else if (matrix[i][j] == 3) {
-                    System.out.print("\uD83C\uDFF3\uFE0F\u200D ");
+                } else if (shots[i][j] == 3) {
+                    System.out.print("❌ ");
                 } else {
                     System.out.print("⬜ ");
                 }
