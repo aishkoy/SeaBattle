@@ -65,4 +65,18 @@ public class SeaBattle {
         }
         return true;
     }
+
+    public static void showField(int[][] matrix) {
+        System.out.println("Matrix:");
+        for (int[] row : matrix) {
+            for (int element : row) {
+                if (element == 0) {
+                    System.out.print("⬜ ");
+                } else {
+                    System.out.print("\uD83D\uDEE5\uFE0F ");
+                }
+            }
+            System.out.println();
+        }
+    }
 }
