@@ -69,6 +69,19 @@ public class SeaBattle {
         char columnChar = input.charAt(0);
         String rowStr = input.substring(1);
 
+        boolean isNumeric = true;4
+        for (int i = 0; i < rowStr.length(); i++) {
+            if (!Character.isDigit(rowStr.charAt(i))) {
+                isNumeric = false;
+                break;
+            }
+        }
+
+        if (!isNumeric) {
+            System.out.println("Row must be a number. Try again.");
+            return null;
+        }
+
         int col = columnChar - 'A';
         int row = Integer.parseInt(rowStr) - 1;
 
