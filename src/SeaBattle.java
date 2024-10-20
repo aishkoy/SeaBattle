@@ -9,6 +9,12 @@ public class SeaBattle {
         Random random = new Random();
 
         int[][] blockSizes = {{1, 3}, {1, 2}, {1, 2}, {1, 1}, {1, 1}, {1, 1}, {1, 1}};
+
+        for (int[] blockSize : blockSizes) {
+            placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
+        }
+
+        showField(matrix);
     }
 
     public static void placeRandomBlock(int[][] matrix, Random random, int blockHeight, int blockWidth) {
