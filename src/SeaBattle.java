@@ -18,24 +18,28 @@ public class SeaBattle {
         showEmptyField(rows, cols);
 
         int[][] shots = new int[rows][cols];
-        int[] coordinates = null;
 
         int numberOfAttempts = 25;
-
         while(numberOfAttempts > 0) {
-            System.out.println("Attempts left" + numberOfAttempts);
+            System.out.println("Attempts left: " + numberOfAttempts);
+            int[] coordinates = null;
+
+            while(coordinates == null) {
+                coordinates = getPlayerInput();
+            }
+
+            int row = coordinates[0];
+            int col = coordinates[1];
+
+            processPlayerShot(matrix, shots, row, col);
+            showUpdatedField(matrix, shots);
             numberOfAttempts -= 1;
         }
-        while(coordinates == null) {
-            coordinates = getPlayerInput();
-        }
 
-        int row = coordinates[0];
-        int col = coordinates[1];
 
-        processPlayerShot(matrix, shots, row, col);
-        showUpdatedField(matrix, shots);
-        showField(matrix);
+
+
+//        showField(matrix);
     }
 
     public static int[] getPlayerInput() {
