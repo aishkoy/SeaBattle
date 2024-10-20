@@ -14,6 +14,7 @@ public class SeaBattle {
             placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
         }
 
+        showEmptyField(rows, cols);
         showField(matrix);
     }
 
@@ -85,4 +86,21 @@ public class SeaBattle {
             System.out.println();
         }
     }
+
+    public static void showEmptyField(int rows, int cols) {
+        System.out.print("   ");
+        for (char c = 'A'; c < 'A' + cols; c++) {
+            System.out.print(c + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < rows; i++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < cols; j++) {
+                System.out.print("⬜ ");
+            }
+            System.out.println();
+        }
+    }
 }
+
