@@ -31,27 +31,33 @@ public class SeaBattle {
             int row = coordinates[0];
             int col = coordinates[1];
 
-            processPlayerShot(matrix, shots, row, col);
+            if (shots[row][col] == 0) {
+                processPlayerShot(matrix, shots, row, col);
 
-            if (matrix[row][col] == 1) {
-                if (isShipSunk(matrix, shots, row, col)) {
-                    System.out.println("You've sunk a ship! \uD83D\uDCA5");
-                    markSunkShip(matrix, shots, row, col);
+                if (matrix[row][col] == 1) {
+                    if (isShipSunk(matrix, shots, row, col)) {
+                        System.out.println("You've sunk a ship! \uD83D\uDCA5");
+                        markSunkShip(matrix, shots, row, col);
+                    }
                 }
-            }
-            showUpdatedField(matrix, shots);
 
-            numberOfAttempts -= 1;
+                showUpdatedField(matrix, shots);
 
-            if (checkAllShipsSunk(matrix, shots)) {
-                System.out.println("Congratulations! You've sunk all ships!");
-                break;
+                if (checkAllShipsSunk(matrix, shots)) {
+                    System.out.println("Congratulations! You've sunk all ships!");
+                    break;
+                }
+
+                numberOfAttempts--;
+
+            } else {
+                System.out.println("You've already shot at this position. Try again.");
             }
         }
 
         if (numberOfAttempts == 0) {
             System.out.println("Game over! You've used all your attempts.");
-            System.out.println("This is where the ships were located");
+            System.out.println("This is where the ships were located:");
             showField(matrix);
         }
 
@@ -192,12 +198,16 @@ public class SeaBattle {
     }
 
     public static void processPlayerShot(int[][] matrix, int[][] shots, int row, int col) {
-        if (matrix[row][col] == 1) {
-            System.out.println("Hitted! 🔥");
-            shots[row][col] = 2;
+        if (shots[row][col] != 0) {
+            System.out.println("You've already shot at this position. Try again.");
         } else {
-            System.out.println("Missed. ⬛");
-            shots[row][col] = 1;
+            if (matrix[row][col] == 1) {
+                System.out.println("Hitted! 🔥");
+                shots[row][col] = 2;
+            } else {
+                System.out.println("Missed. ⬛");
+                shots[row][col] = 1;
+            }
         }
     }
 
