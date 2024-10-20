@@ -16,11 +16,23 @@ public class SeaBattle {
         }
 
         showEmptyField(rows, cols);
-        getPlayerInput();
+
+        int[][] shots = new int[rows][cols];
+        int[] coordinates = null;
+
+        while(coordinates == null) {
+            coordinates = getPlayerInput();
+        }
+
+        int row = coordinates[0];
+        int col = coordinates[1];
+
+        processPlayerShot(matrix, shots, row, col);
+        showUpdatedField(matrix, shots);
         showField(matrix);
     }
 
-    public static void getPlayerInput() {
+    public static int[] getPlayerInput() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter the coordinates (for example, B3):");
@@ -28,7 +40,7 @@ public class SeaBattle {
 
         if (input.length() < 2 || input.length() > 3) {
             System.out.println("Incorrect format. Try again.");
-            return;
+            return null;
         }
 
         char columnChar = input.charAt(0);
@@ -39,11 +51,11 @@ public class SeaBattle {
 
         if (col < 0 || col > 6 || row < 0 || row > 6) {
             System.out.println("Coordinates are out of range. Try again.");
+            return null;
         } else {
             System.out.println("You've entered the coordinates: " + columnChar + rowStr + " (row " + (row + 1) + ", column " + (col + 1) + ")");
         }
-
-        scanner.close();
+        return new int[]{row, col};
     }
 
     public static void placeRandomBlock(int[][] matrix, Random random, int blockHeight, int blockWidth) {
@@ -136,6 +148,41 @@ public class SeaBattle {
             System.out.print((i + 1) + " ");
             for (int j = 0; j < cols; j++) {
                 System.out.print("⬜ ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void processPlayerShot(int[][] matrix, int[][] shots, int row, int col) {
+        if (matrix[row][col] == 1) {
+            System.out.println("Hitted! 🔥");
+            shots[row][col] = 2;
+        } else {
+            System.out.println("Missed. ⬛");
+            shots[row][col] = 1;
+        }
+    }
+
+    public static void showUpdatedField(int[][] matrix, int[][] shots) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        System.out.print("   ");
+        for (char c = 'A'; c < 'A' + cols; c++) {
+            System.out.print(c + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < rows; i++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < cols; j++) {
+                if (shots[i][j] == 2) {
+                    System.out.print("🔥 ");
+                } else if (shots[i][j] == 1) {
+                    System.out.print("⬛ ");
+                } else {
+                    System.out.print("⬜ ");
+                }
             }
             System.out.println();
         }
