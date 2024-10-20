@@ -20,6 +20,12 @@ public class SeaBattle {
         int[][] shots = new int[rows][cols];
         int[] coordinates = null;
 
+        int numberOfAttempts = 25;
+
+        while(numberOfAttempts > 0) {
+            System.out.println("Attempts left" + numberOfAttempts);
+            numberOfAttempts -= 1;
+        }
         while(coordinates == null) {
             coordinates = getPlayerInput();
         }
