@@ -74,10 +74,19 @@ public class SeaBattle {
     }
 
     public static void showField(int[][] matrix) {
-        System.out.println("Matrix:");
-        for (int[] row : matrix) {
-            for (int element : row) {
-                if (element == 0) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        System.out.print("   ");
+        for (char c = 'A'; c < 'A' + cols; c++) {
+            System.out.print(c + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < rows; i++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 0) {
                     System.out.print("⬜ ");
                 } else {
                     System.out.print("\uD83D\uDEE5\uFE0F ");
@@ -86,6 +95,7 @@ public class SeaBattle {
             System.out.println();
         }
     }
+
 
     public static void showEmptyField(int rows, int cols) {
         System.out.print("   ");
