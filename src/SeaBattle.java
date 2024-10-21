@@ -87,16 +87,23 @@ public class SeaBattle {
                 player.incrementLosses();
             }
 
-            System.out.print("\nDo you want to play again? (yes/no): ");
-            String answer = sc.nextLine();
-            if (answer.equalsIgnoreCase("no")) {
-                gameContinues = false;
-                System.out.println("\nHere are the statistics of all players:");
-                displayLeaderboard();
-                System.out.println("\nThanks for playing!");
-                System.out.println("Goodbye!");
-            } else if (answer.equalsIgnoreCase("yes")){
-                continue;
+            boolean gameOver = true;
+            while(gameOver){
+                System.out.print("\nDo you want to play again? (yes/no): ");
+                String answer = sc.nextLine();
+                if (answer.equalsIgnoreCase("no")) {
+                    gameOver = false;
+                    gameContinues = false;
+                    System.out.println("\nHere are the statistics of all players:");
+                    displayLeaderboard();
+                    System.out.println("\nThanks for playing!");
+                    System.out.println("Goodbye!");
+                } else if (answer.equalsIgnoreCase("yes")){
+                    gameOver = false;
+                    continue;
+                } else{
+                    System.out.print("Try again!");
+                }
             }
         }
     }
@@ -399,8 +406,26 @@ public class SeaBattle {
         }
     }
 
+    public static void sortPlayersByWins(Player[] players) {
+        int n = players.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (players[j].getWins() < players[j + 1].getWins()) {
+                    Player temp = players[j];
+                    players[j] = players[j + 1];
+                    players[j + 1] = temp;
+                }
+            }
+        }
+    }
+
     public static void displayLeaderboard() {
-        for (Player p : players) {
+        Player[] playerArray = new Player[players.size()];
+        players.toArray(playerArray);
+
+        sortPlayersByWins(playerArray);
+
+        for (Player p : playerArray) {
             System.out.println(p.getName() + " - Wins: " + p.getWins() + ", Losses: " + p.getLosses());
         }
     }
