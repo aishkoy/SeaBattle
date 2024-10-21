@@ -9,30 +9,38 @@ public class SeaBattle {
         int rows = 7;
         int cols = 7;
         int[][] matrix = new int[rows][cols];
+        int[][] shots = new int[rows][cols];
 
         Random random = new Random();
 
         int[][] blockSizes = {{1, 3}, {1, 2}, {1, 2}, {1, 1}, {1, 1}, {1, 1}, {1, 1}};
 
-        for (int[] blockSize : blockSizes) {
-            placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
-        }
-
         Scanner sc = new Scanner(System.in);
         boolean gameContinues = true;
 
         while (gameContinues) {
+
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    matrix[i][j] = 0;
+                    shots[i][j] = 0;
+                }
+            }
+
+            for (int[] blockSize : blockSizes) {
+                placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
+            }
+
             System.out.print("Enter your name: ");
             String name = sc.nextLine();
             Player player = getPlayer(name);
+
             if(player == null){
                 player = new Player(name);
                 players.add(player);
             }
 
             showEmptyField(rows, cols);
-
-            int[][] shots = new int[rows][cols];
             int numberOfAttempts = 25;
 
             while(numberOfAttempts > 0) {
@@ -79,7 +87,7 @@ public class SeaBattle {
                 player.incrementLosses();
             }
 
-            System.out.print("Do you want to play again? (yes/no): ");
+            System.out.print("\nDo you want to play again? (yes/no): ");
             String answer = sc.nextLine();
             if (answer.equalsIgnoreCase("no")) {
                 gameContinues = false;
