@@ -1,7 +1,10 @@
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 public class SeaBattle {
+    static ArrayList<Player> players = new ArrayList<>();
+
     public static void main(String[] args) {
         int rows = 7;
         int cols = 7;
@@ -15,50 +18,78 @@ public class SeaBattle {
             placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
         }
 
-        showEmptyField(rows, cols);
+        Scanner sc = new Scanner(System.in);
+        boolean gameContinues = true;
 
-        int[][] shots = new int[rows][cols];
-
-        int numberOfAttempts = 25;
-        while(numberOfAttempts > 0) {
-            System.out.println("Attempts left: " + numberOfAttempts);
-            int[] coordinates = null;
-
-            while(coordinates == null) {
-                coordinates = getPlayerInput();
+        while (gameContinues) {
+            System.out.print("Enter your name: ");
+            String name = sc.nextLine();
+            Player player = getPlayer(name);
+            if(player == null){
+                player = new Player(name);
+                players.add(player);
             }
 
-            int row = coordinates[0];
-            int col = coordinates[1];
+            showEmptyField(rows, cols);
 
-            if (shots[row][col] == 0) {
-                processPlayerShot(matrix, shots, row, col);
+            int[][] shots = new int[rows][cols];
+            int numberOfAttempts = 25;
 
-                if (matrix[row][col] == 1) {
-                    if (isShipSunk(matrix, shots, row, col)) {
-                        System.out.println("You've sunk a ship! \uD83D\uDCA5");
-                        markSunkShip(matrix, shots, row, col);
+            while(numberOfAttempts > 0) {
+                System.out.println("Attempts left: " + numberOfAttempts);
+                int[] coordinates = null;
+
+                while(coordinates == null) {
+                    coordinates = getPlayerInput();
+                }
+
+                int row = coordinates[0];
+                int col = coordinates[1];
+
+                if (shots[row][col] == 0) {
+                    processPlayerShot(matrix, shots, row, col);
+
+                    if (matrix[row][col] == 1) {
+                        if (isShipSunk(matrix, shots, row, col)) {
+                            System.out.println("You've sunk a ship! \uD83D\uDCA5");
+                            markSunkShip(matrix, shots, row, col);
+                        }
                     }
+
+                    System.out.println();
+                    showUpdatedField(matrix, shots);
+
+                    if (checkAllShipsSunk(matrix, shots)) {
+                        System.out.println("Congratulations! You've sunk all ships!");
+                        player.incrementWins();
+                        break;
+                    }
+
+                    numberOfAttempts--;
+
+                } else {
+                    System.out.println("You've already shot at this position. Try again.");
                 }
-
-                showUpdatedField(matrix, shots);
-
-                if (checkAllShipsSunk(matrix, shots)) {
-                    System.out.println("Congratulations! You've sunk all ships!");
-                    break;
-                }
-
-                numberOfAttempts--;
-
-            } else {
-                System.out.println("You've already shot at this position. Try again.");
             }
-        }
 
-        if (numberOfAttempts == 0) {
-            System.out.println("Game over! You've used all your attempts.");
-            System.out.println("This is where the ships were located:");
-            showField(matrix);
+            if (numberOfAttempts == 0) {
+                System.out.println("\nGame over! You've used all your attempts.");
+                System.out.println("This is where the ships were located:");
+                showField(matrix);
+                player.incrementLosses();
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            String answer = sc.nextLine();
+            if (answer.equalsIgnoreCase("no")) {
+                gameContinues = false;
+                System.out.println("\nHere are the statistics of all players:");
+                displayLeaderboard();
+                System.out.println("\nThanks for playing!");
+                System.out.println("Goodbye!");
+            } else if (answer.equalsIgnoreCase("yes")){
+                continue;
+            }
         }
     }
 
@@ -190,8 +221,6 @@ public class SeaBattle {
         if (col < 0 || col > 6 || row < 0 || row > 6) {
             System.out.println("Coordinates are out of range. Try again.");
             return null;
-        } else {
-            System.out.println("You've entered the coordinates: " + columnChar + rowStr + " (row " + (row + 1) + ", column " + (col + 1) + ")");
         }
         return new int[]{row, col};
     }
@@ -320,5 +349,51 @@ public class SeaBattle {
         }
         return true;
     }
-}
 
+    public static Player getPlayer(String name) {
+        for (Player p : players) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    static class Player {
+        private String name;
+        private int wins;
+        private int losses;
+
+        public Player(String name) {
+            this.name = name;
+            this.wins = 0;
+            this.losses = 0;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getWins() {
+            return wins;
+        }
+
+        public int getLosses() {
+            return losses;
+        }
+
+        public void incrementWins() {
+            wins++;
+        }
+
+        public void incrementLosses() {
+            losses++;
+        }
+    }
+
+    public static void displayLeaderboard() {
+        for (Player p : players) {
+            System.out.println(p.getName() + " - Wins: " + p.getWins() + ", Losses: " + p.getLosses());
+        }
+    }
+}
