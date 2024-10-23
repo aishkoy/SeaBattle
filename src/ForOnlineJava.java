@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class SeaBattle {
+public class ForOnlineJava {
     static ArrayList<Player> players = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -31,12 +31,9 @@ public class SeaBattle {
                 placeRandomBlock(matrix, random, blockSize[0], blockSize[1]);
             }
 
+            clearScreen();
             System.out.print("Enter your name: ");
             String name = sc.nextLine();
-            while(name.isBlank()){
-                System.out.print("You didn't enter name. Try again: ");
-                name = sc.nextLine();
-            }
             Player player = getPlayer(name);
 
             if(player == null){
@@ -45,7 +42,7 @@ public class SeaBattle {
             }
 
             showEmptyField(rows, cols);
-            int numberOfAttempts = 30;
+            int numberOfAttempts = 25;
 
             while(numberOfAttempts > 0) {
                 System.out.println("Attempts left: " + numberOfAttempts);
@@ -59,6 +56,7 @@ public class SeaBattle {
                 int col = coordinates[1];
 
                 if (shots[row][col] == 0) {
+                    clearScreen();
                     processPlayerShot(matrix, shots, row, col);
 
                     if (matrix[row][col] == 1) {
@@ -86,7 +84,7 @@ public class SeaBattle {
 
             if (numberOfAttempts == 0) {
                 System.out.println("\nGame over! You've used all your attempts.");
-                System.out.println("This is where the ships were located:");
+                System.out.println("This is where the ships were located: \n");
                 showField(matrix);
                 player.incrementLosses();
             }
@@ -98,6 +96,7 @@ public class SeaBattle {
                 if (answer.equalsIgnoreCase("no")) {
                     gameOver = false;
                     gameContinues = false;
+                    clearScreen();
                     System.out.println("\nHere are the statistics of all players:");
                     displayLeaderboard();
                     System.out.println("\nThanks for playing!");
@@ -174,7 +173,7 @@ public class SeaBattle {
 
         System.out.print("   ");
         for (char c = 'A'; c < 'A' + cols; c++) {
-            System.out.print(c + "  ");
+            System.out.print(c + " ");
         }
         System.out.println();
 
@@ -194,7 +193,7 @@ public class SeaBattle {
     public static void showEmptyField(int rows, int cols) {
         System.out.print("   ");
         for (char c = 'A'; c < 'A' + cols; c++) {
-            System.out.print(c + "  ");
+            System.out.print(c + " ");
         }
         System.out.println();
 
@@ -249,7 +248,7 @@ public class SeaBattle {
             System.out.println("You've already shot at this position. Try again.");
         } else {
             if (matrix[row][col] == 1) {
-                System.out.println("Hit! 🔥");
+                System.out.println("Hitted! 🔥");
                 shots[row][col] = 2;
             } else {
                 System.out.println("Missed. ⬛");
@@ -337,7 +336,7 @@ public class SeaBattle {
 
         System.out.print("   ");
         for (char c = 'A'; c < 'A' + cols; c++) {
-            System.out.print(c + "  ");
+            System.out.print(c + " ");
         }
         System.out.println();
 
@@ -431,6 +430,19 @@ public class SeaBattle {
 
         for (Player p : playerArray) {
             System.out.println(p.getName() + " - Wins: " + p.getWins() + ", Losses: " + p.getLosses());
+        }
+    }
+
+    public static void clearScreen()
+    {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            System.out.println("Error clearing the screen.");
         }
     }
 }
