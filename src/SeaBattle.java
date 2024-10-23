@@ -33,6 +33,10 @@ public class SeaBattle {
 
             System.out.print("Enter your name: ");
             String name = sc.nextLine();
+            while(name.isBlank()){
+                System.out.print("You didn't enter name. Try again: ");
+                name = sc.nextLine();
+            }
             Player player = getPlayer(name);
 
             if(player == null){
@@ -41,7 +45,7 @@ public class SeaBattle {
             }
 
             showEmptyField(rows, cols);
-            int numberOfAttempts = 25;
+            int numberOfAttempts = 30;
 
             while(numberOfAttempts > 0) {
                 System.out.println("Attempts left: " + numberOfAttempts);
@@ -245,7 +249,7 @@ public class SeaBattle {
             System.out.println("You've already shot at this position. Try again.");
         } else {
             if (matrix[row][col] == 1) {
-                System.out.println("Hitted! 🔥");
+                System.out.println("Hit! 🔥");
                 shots[row][col] = 2;
             } else {
                 System.out.println("Missed. ⬛");
